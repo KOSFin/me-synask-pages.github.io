@@ -181,7 +181,7 @@
         </div>
     </div>
     <div class="content">
-        <iframe id="content-frame" src="https://code.synask.ru/welcome"></iframe>
+        <iframe id="content-frame" src="https://me.synask.ru/welcome"></iframe>
     </div>
     <audio id="background-music" loop autoplay>
         <source src="path-to-your-music-file.mp3" type="audio/mpeg">
@@ -190,11 +190,11 @@
     <script>
         function loadContent(url) {
             var iframe = document.getElementById('content-frame');
-            iframe.src = `https://code.synask.ru${url}`;
+            iframe.src = `https://me.synask.ru${url}`;
         }
 
         window.addEventListener('message', function(event) {
-            if (event.origin !== 'https://code.synask.ru') {
+            if (event.origin !== 'https://me.synask.ru') {
                 return;
             }
 
@@ -206,7 +206,7 @@
 
         function sendMessageToIframe(message) {
             var iframe = document.getElementById('content-frame');
-            iframe.contentWindow.postMessage(message, 'https://code.synask.ru');
+            iframe.contentWindow.postMessage(message, 'https://me.synask.ru');
         }
     </script>
 </body>
