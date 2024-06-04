@@ -607,6 +607,23 @@
             }
         });
 
+        function renderCaptcha() {
+            widgetId = turnstile.render('#turnstile-container', {
+                sitekey: '0x4AAAAAAAb6BKl1y6rR8dGk',
+                callback: function(token) {
+                    captchaToken = token;
+                },
+                'expired-callback': function() {
+                    showPopupWithImageAndText('Срок действия капчи истек. Пожалуйста, пройдите проверку заново.', 'https://imgur.com/aHcCPrp.jpg', 5000);
+                    renderCaptcha();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCaptcha();
+        });
+
         // Функция для форматирования номера телефона при вводе
         function formatPhoneNumber() {
             var phoneNumber = document.getElementById('phone-num').value;
@@ -902,23 +919,6 @@
                 }, 4000);
             }
         }
-
-        function renderCaptcha() {
-            widgetId = turnstile.render('#turnstile-container', {
-                sitekey: '0x4AAAAAAAUskutHWOKf6J7G',
-                callback: function(token) {
-                    captchaToken = token;
-                },
-                'expired-callback': function() {
-                    showPopupWithImageAndText('Срок действия капчи истек. Пожалуйста, пройдите проверку заново.', 'https://imgur.com/aHcCPrp.jpg', 5000);
-                    renderCaptcha();
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            renderCaptcha();
-        });
 
         document.getElementById('phone-num').addEventListener('input', () => {
             if (isPhoneUsed) {
