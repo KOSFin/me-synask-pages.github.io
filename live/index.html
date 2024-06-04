@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <title>Sidebar Menu</title>
+    <title>Dynamic Content Loading</title>
     <style>
         body {
             margin: 0;
@@ -13,8 +13,6 @@
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
             overflow: hidden;
         }
@@ -128,9 +126,14 @@
             border-left: 4px solid orange;
         }
 
-        .additional-content {
+        .content {
+            flex-grow: 1;
             padding: 20px;
             margin-left: 100px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
@@ -141,53 +144,70 @@
             color: #666666;
         }
 
-        .iframe-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
         iframe {
-            border: none;
             width: 100%;
             height: 100%;
+            border: none;
         }
-
     </style>
 </head>
 <body>
-    <div class="sidebar" src="sidebar.html">
+    <div class="sidebar">
         <div class="sidebar-content">
-            <a href="/profile" class="profile-button">
+            <a href="#" class="profile-button" onclick="loadContent('/profile')">
                 <img src="https://cnicyffiqvdhgyzkogtl.supabase.co/storage/v1/object/public/Avatars%20and%20Covers/fenix-default-avatar-white-bkgd.png" alt="Avatar" class="avatar">
                 <span class="profile-name">Имя Фамилия</span>
             </a>
-            <a href="/welcome" class="sidebar-button">
+            <a href="#" class="sidebar-button" onclick="loadContent('/welcome')">
                 <i class="fas fa-home"></i>
                 <span>Главная</span>
             </a>
-            <a href="/messenger" class="sidebar-button active">
+            <a href="#" class="sidebar-button active" onclick="loadContent('/messenger')">
                 <i class="fas fa-comment"></i>
                 <span>Мессенджер</span>
             </a>
-            <a href="/people" class="sidebar-button">
+            <a href="#" class="sidebar-button" onclick="loadContent('/people')">
                 <i class="fas fa-users"></i>
                 <span>Люди</span>
             </a>
-            <a href="/groups" class="sidebar-button">
+            <a href="#" class="sidebar-button" onclick="loadContent('/groups')">
                 <i class="fas fa-user-friends"></i>
                 <span>Группы</span>
             </a>
-            <a href="/options" class="sidebar-button">
+            <a href="#" class="sidebar-button" onclick="loadContent('/options')">
                 <i class="fas fa-cog"></i>
                 <span>Настройки</span>
             </a>
         </div>
     </div>
-    <div class="iframe-container">
-        <iframe src="https://code.synask.ru/profile"></iframe>
+    <div class="content">
+        <iframe id="content-frame" src="https://code.synask.ru/welcome"></iframe>
     </div>
+    <audio id="background-music" loop autoplay>
+        <source src="path-to-your-music-file.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script>
+        function loadContent(url) {
+            var iframe = document.getElementById('content-frame');
+            iframe.src = `https://code.synask.ru${url}`;
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.origin !== 'https://code.synask.ru') {
+                return;
+            }
+
+            var data = event.data;
+            if (data.action === 'navigate') {
+                loadContent(data.url);
+            }
+        });
+
+        function sendMessageToIframe(message) {
+            var iframe = document.getElementById('content-frame');
+            iframe.contentWindow.postMessage(message, 'https://code.synask.ru');
+        }
+    </script>
 </body>
 </html>
