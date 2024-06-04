@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <title>Account Setup</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #1d3b8a, #ff6600);
+    }
+    .message {
+      text-align: center;
+      color: #fff;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 2s linear infinite;
+      margin: 2rem auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="message">
+      <h1>Setting up your account</h1>
+      <p>Please wait a few seconds while we prepare your account and check for any damaged files.</p>
+      <div class="loader"></div>
+    </div>
+  </div>
+  <script>
+    console.log(`
+        ░██████╗██╗░░░██╗███╗░░██╗░█████╗░░██████╗██╗░░██╗
+        ██╔════╝╚██╗░██╔╝████╗░██║██╔══██╗██╔════╝██║░██╔╝
+        ╚█████╗░░╚████╔╝░██╔██╗██║███████║╚█████╗░█████═╝░
+        ░╚═══██╗░░╚██╔╝░░██║╚████║██╔══██║░╚═══██╗██╔═██╗░
+        ██████╔╝░░░██║░░░██║░╚███║██║░░██║██████╔╝██║░╚██╗
+        ╚═════╝░░░░╚═╝░░░╚═╝░░╚══╝╚═╝░░╚═╝╚═════╝░╚═╝░░╚═╝
+    `);
+    console.log(`
+        =̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶=̶
+    `);
+    console.log('\n\n')
+  </script>
+  <script>
+    const { createClient } = supabase;
+    const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
+
+    const setupAccount = async () => {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+
+      if (user) {
+        // Public information
+        let { data: publicData } = await supabaseClient
+          .from('users_public_information')
+          .select('*')
+          .eq('auth_id', user.id);
+
+        const birthdayParts = user.user_metadata.birthday.split('-');
+        const formattedBirthday = `${birthdayParts[0]}.${birthdayParts[1]}.${birthdayParts[2]}`;
+        const genderValue = parseInt(user.user_metadata.gender);
+
+        if (!publicData.length) {
+          await supabaseClient
+            .from('users_public_information')
+            .upsert(
+              {
+                auth_id: user.id,
+                username: user.user_metadata.nickname,
+                first_name: user.user_metadata.firstName,
+                last_name: user.user_metadata.lastName,
+                gender: genderValue,
+                birthday: formattedBirthday,
+                created_at: new Date(),
+              },
+              { onConflict: ['auth_id'] }
+            );
+        }
+
+        // Private information
+        let { data: privateData } = await supabaseClient
+          .from('users_private_information')
+          .select('*')
+          .eq('auth_id', user.id);
+
+        if (!privateData.length) {
+          await supabaseClient
+            .from('users_private_information')
+            .upsert(
+              {
+                auth_id: user.id,
+                email: user.email,
+                phone: user.user_metadata.phone,
+              },
+              { onConflict: ['auth_id'] }
+          );
+        }
+
+        window.location.href = '/welcome.html';
+      } else {
+        window.location.href = '/login.html';
+      }
+    };
+
+    setupAccount();
+  </script>
+</body>
+</html>
