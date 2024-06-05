@@ -151,68 +151,6 @@
         const { createClient } = supabase;
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
-        $(document).ready(async function () {
-            // Function to get user's location
-            function getUserLocation() {
-                // Check if geolocation is supported
-                if (navigator.geolocation) {
-                    // Get current position
-                    navigator.geolocation.getCurrentPosition(getWeatherByLocation, error);
-                } else {
-                    console.log('Geolocation is not supported by this browser.');
-                }
-            }
-
-            // Function to handle geolocation error
-            function error() {
-                console.log('Unable to retrieve your location.');
-            }
-
-            // Function to get weather data by location
-            function getWeatherByLocation(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                getWeather(latitude, longitude);
-            }
-
-            // Function to get weather data from API
-            function getWeather(latitude, longitude) {
-                const apiKey = 'aa05b85e28c38beb738bb75c15296d97';
-                const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-
-                $.ajax({
-                    url: apiUrl,
-                    method: 'GET',
-                    success: function (data) {
-                        displayWeather(data);
-                    },
-                    error: function () {
-                        console.log('Error fetching weather data.');
-                    }
-                });
-            }
-
-            // Function to display weather information
-            function displayWeather(data) {
-                if (data && data.name && data.sys && data.sys.country && data.main && data.weather && data.weather[0]) {
-                    const location = data.name + ', ' + data.sys.country;
-                    const temperature = Math.round(data.main.temp) + '°C';
-                    const description = data.weather[0].description;
-
-                    $('#location').text(location);
-                    $('#temperature').text('Temperature: ' + temperature);
-                    $('#description').text('Description: ' + description);
-                    $('#forecast').text('Forecast: ' + data.weather[0].main);
-                    $('#nightTemperature').text('Night Temperature: ' + Math.round(data.main.temp_min) + '°C');
-                    $('#precipitation').text('Precipitation: ' + data.main.humidity + '%');
-                } else {
-                    console.log('Weather data is invalid.');
-                }
-            }
-
-            // Get user's location and fetch weather data
-            getUserLocation();
-
             try {
                 const { data: userData, error: userError } = await supabaseClient.auth.getUser();
                 if (userError) {
