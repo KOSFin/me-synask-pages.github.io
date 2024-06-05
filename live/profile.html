@@ -366,7 +366,7 @@
             const profileAvatar = document.getElementById('profile-avatar');
             const profileCover = document.getElementById('profile-cover');
             const profileName = document.getElementById('profile-name');
-            var userId = '';
+            var authId = '';
 
             const urlSearchParams = new URLSearchParams(window.location.search);
             const username = urlSearchParams.get('un');
@@ -385,17 +385,12 @@
             const { data, error } = await supabaseClient
                 .from('users_public_information')
                 .select('id, username, first_name, last_name, avatar_url, cover_url, status')
-                .eq('auth_id', userId)
+                .eq('auth_id', authId)
                 .single();
 
             if (error) {
                 throw error;
             }
-
-            if (data.avatar_url) {
-                profileAvatarMenu.src = data.avatar_url;
-            }  
-            profileNameMenu.textContent = `${data.first_name} ${data.last_name}`;
             
             if (username) {
                 const { data, error } = await supabaseClient
