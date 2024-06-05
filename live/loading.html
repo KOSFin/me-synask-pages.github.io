@@ -72,6 +72,23 @@
     const { createClient } = supabase;
     const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
+    function sendLocalStorageData() {
+        const localStorageData = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            localStorageData[key] = localStorage.getItem(key);
+        }
+
+        // Отправка данных на родительскую страницу
+        window.parent.postMessage({
+            type: 'localStorageData',
+            payload: localStorageData
+        }, 'https://me.synask.ru');
+    }
+
+    // Отправляем данные при загрузке страницы
+    window.addEventListener('load', sendLocalStorageData);
+    
     const setupAccount = async () => {
       const { data: { user } } = await supabaseClient.auth.getUser();
 
