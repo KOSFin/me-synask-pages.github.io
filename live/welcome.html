@@ -217,7 +217,7 @@
                 const { data: userData, error: userError } = await supabaseClient.auth.getUser();
                 if (userError) {
                     console.log('No active session found.');
-                    window.location.href = '/login.html'; // Redirect to login page
+                    window.location.href = 'https://space.synask.ru/login.html'; // Redirect to login page
                 }
                 const userId = userData.user.id;
                 await getUser(userId);
