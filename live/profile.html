@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" type="text/css" href="menu.css">
     <title>Synask User Profile</title>
     <style>
         body {
@@ -285,6 +286,35 @@
     </style>
 </head>
 <body>
+    <div class="sidebar">
+        <div class="sidebar-animation"></div>
+        <div class="sidebar-content">
+            <a href="/profile" class="profile-button">
+                <img id="profile-avatar-inmenu" src="https://cnicyffiqvdhgyzkogtl.supabase.co/storage/v1/object/public/Avatars%20and%20Covers/fenix-default-avatar-white-bkgd.png" alt="Avatar" class="avatar">
+                <span class="profile-name" id="profile-name-inmenu" style="font-size: 15px;"></span>
+            </a>
+            <a href="/welcome" class="sidebar-button">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="#" class="sidebar-button">
+                <i class="fas fa-comment"></i>
+                <span>Мессенджер</span>
+            </a>
+            <a href="#" class="sidebar-button">
+                <i class="fas fa-users"></i>
+                <span>Люди</span>
+            </a>
+            <a href="#" class="sidebar-button">
+                <i class="fas fa-user-friends"></i>
+                <span>Группы</span>
+            </a>
+            <a href="/options" class="sidebar-button">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </div>
+    </div>
     <div class="container">
         <div class="profile-block" style="display: none;">
             <div class="profile-header">
@@ -336,8 +366,6 @@
             const profileAvatar = document.getElementById('profile-avatar');
             const profileCover = document.getElementById('profile-cover');
             const profileName = document.getElementById('profile-name');
-            const profileNameMenu = document.getElementById('profile-name-inmenu');
-            const profileAvatarMenu = document.getElementById('profile-avatar-inmenu');
             var userId = '';
 
             const urlSearchParams = new URLSearchParams(window.location.search);
