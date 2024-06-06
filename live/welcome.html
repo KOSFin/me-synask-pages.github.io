@@ -151,6 +151,7 @@
         const { createClient } = supabase;
         const supabaseClient = createClient('https://cnicyffiqvdhgyzkogtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuaWN5ZmZpcXZkaGd5emtvZ3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDc3NDM2NzcsImV4cCI6MjAyMzMxOTY3N30.bZoapdV-TJiq42uJaOPGBfPz91ULReQ1_ahXpUHNaJ8');
 
+        async function getActiveSession() {
             try {
                 const { data: userData, error: userError } = await supabaseClient.auth.getUser();
                 if (userError) {
@@ -162,7 +163,7 @@
             } catch (error) {
                 console.error('Error fetching user:', error.message);
             }
-
+        }
             // Function to get user info
             async function getUser(userId) {
                 try {
