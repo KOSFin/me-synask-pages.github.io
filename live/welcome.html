@@ -164,33 +164,33 @@
                 console.error('Error fetching user:', error.message);
             }
         }
-            // Function to get user info
-            async function getUser(userId) {
-                try {
-                    const { data, error } = await supabaseClient
-                        .from('users_public_information')
-                        .select('id, username, first_name, last_name, avatar_url, status')
-                        .eq('auth_id', userId)
-                        .single();
+        // Function to get user info
+        async function getUser(userId) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('users_public_information')
+                    .select('id, username, first_name, last_name, avatar_url, status')
+                    .eq('auth_id', userId)
+                    .single();
 
-                    if (error) {
-                        throw error;
-                    }
-
-                    displayUserInfo(data);
-                } catch (error) {
-                    console.log('Error fetching user info:', error.message);
+                if (error) {
+                    throw error;
                 }
-            }
 
-            // Function to display user info
-            function displayUserInfo(user) {
-                $('#avatar').attr('src', user.avatar_url);
-                $('#username').text(`${user.first_name} ${user.last_name} (${user.username})`);
-                $('#status').text(`Status: ${user.status}`);
+                displayUserInfo(data);
+            } catch (error) {
+                console.log('Error fetching user info:', error.message);
             }
+        }
 
-        });
+        // Function to display user info
+        function displayUserInfo(user) {
+            $('#avatar').attr('src', user.avatar_url);
+            $('#username').text(`${user.first_name} ${user.last_name} (${user.username})`);
+            $('#status').text(`Status: ${user.status}`);
+        }
+
+        getActiveSession();
     </script>
 </body>
 </html>
